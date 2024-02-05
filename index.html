@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <title>Myanmar NRC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       body.dark-mode {
+            background-color: #1a202c;
+            color: #cbd5e0;
+        }
+
+        body.dark-mode label {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode footer {
+            background-color: #2d3748;
+            color: #cbd5e0;
+        }
+    </style>
+    
+</head>
+<body class="bg-slate-300 dark:bg-slate-800 h-screen flex items-center justify-center">
+
+    <div class="w-full max-w-md">
+        <div class="flex items-center justify-end mt-4">
+        
+        <!-- Light Mode Button -->
+        <button id="toggleMode" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+              <span class="icon-toggle dark-mode"><i class="fas fa-sun"></i> Light</span>
+              <span class="icon-toggle light-mode"><i class="fas fa-moon"></i> Dark</span>
+            </button>
+    </div>
+        <form class="grid gap-6" onsubmit="submitForm(event)">
+          <div>
+                <label for="region" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ပြည်နယ်/တိုင်း</label>
+                <select id="region" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onchange="fetchNrc()">
+                  <option selected>ရွေးပါ</option>
+                  <option value=1>၁</option>
+                  <option value=2>၂</option>
+                  <option value=3>၃</option>
+                  <option value=4>၄</option>
+                  <option value=5>၅</option>
+                  <option value=6>၆</option>
+                  <option value=7>၇</option>
+                  <option value=8>၈</option>
+                  <option value=9>၉</option>
+                  <option value=10>၁၀</option>
+                  <option value=11>၁၁</option>
+                  <option value=12>၁၂</option>
+                  <option value=13>၁၃</option>
+                  <option value=14>၁၄</option>
+              </select>
+          </div>
+          <div>
+            <label for="code" class="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                မြို့နယ်
+            </label>
+            <select id="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </select>
+          </div>
+           <div>
+                <label for="number_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">အမျိုးအစား</label>
+                <select id="number_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <option value="(နိုင်)">နိုင်</option>
+                  <option value="(ဧည့်)">ဧည့်</option>
+                  <option value="(ပြု)">ပြု</option>
+              </select>
+          </div>
+          <div class="mb-6">
+            <label for="number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">နံပါတ်</label>
+            <input type="text" id="number" maxlength="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        </div>
+        <div>
+          <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+        </div>
+        <p class="mt-2 text-sm text-white-900 dark:text-white-900" id="result"></p>
+        </form>
+        <footer class="w-full max-w-md text-center text-gray-300 bg-gray-800 py-4 mt-20 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <p class="text-sm">&copy; 2024 Myanmar NRC. All rights reserved.</p>
+        </footer>
+    </div>
+     
+   
+  <script>
+     tailwind.config = {
+            content: ["./*.html"],
+            darkMode: "class"
+        };
+
+      function fetchNrc() {
+          const selectedRegion = document.getElementById('region').value;
+
+              // Fetch data based on the selected region
+          fetch("https://raw.githubusercontent.com/htetoozin/Myanmar-NRC/master/nrc.json")
+          .then(response => response.json())
+          .then(({data}) => {
+              const nrcs = data.filter(region => region.nrc_code === selectedRegion)
+             // Update the second dropdown with fetched results
+              const resultsDropdown = document.getElementById('code');
+                    // Clear previous options
+                    resultsDropdown.innerHTML = ''; 
+
+                  // Add new options based on fetched data
+                  nrcs.forEach(item => {
+                      const option = document.createElement('option');
+                      option.value = item.name_mm;
+                      option.text = item.name_mm;
+                      resultsDropdown.add(option);
+                  });
+            })
+          .catch(error => console.error('Error fetching data:', error));
+      }
+
+      function submitForm(event){
+        event.preventDefault();
+
+       
+        const selectedRegion = document.getElementById('region').value;
+        const selectedCode = document.getElementById('code').value;
+        const selectedNumberType = document.getElementById('number_type').value;
+        const number = document.getElementById('number').value;
+
+        const newMMNumber = enToMM(selectedRegion)
+        const newSelectedCode = getNRC(selectedCode)
+      
+        if(!selectedCode || !number){
+            alert('မြို့နယ်နှင့် နံပါတ်ကို ထည့်ပေးပါ');
+            return;
+        }
+
+        document.getElementById('result').innerHTML = 
+        `<span>မှတ်ပုံတင် နံပါတ် - ${newMMNumber}/${newSelectedCode}${selectedNumberType}${number}</span>`;
+
+      }
+
+      function enToMM(value){
+            const mmNumbers = ["၀", "၁", "၂", "၃", "၄", "၅", "၆", "၇", "၈", "၉"];
+            return mmNumbers.find((mmNumber, key) => key == value)
+      }
+
+      function getNRC(value){
+            return value.substring(1, 4); 
+      }
+
+      // Check user preference for dark mode
+        const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+
+        // Apply dark mode if user prefers it
+        if (prefersDarkMode) {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Toggle dark mode
+        document.getElementById('toggleMode').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleIcons();
+        });
+
+        // Function to toggle icons based on mode
+        function toggleIcons() {
+            const darkModeIcons = document.querySelectorAll('.icon-toggle.dark-mode');
+            const lightModeIcons = document.querySelectorAll('.icon-toggle.light-mode');
+
+            darkModeIcons.forEach(icon => {
+                icon.style.display = document.body.classList.contains('dark-mode') ? 'inline-block' : 'none';
+            });
+
+            lightModeIcons.forEach(icon => {
+                icon.style.display = document.body.classList.contains('dark-mode') ? 'none' : 'inline-block';
+            });
+        }
+        toggleIcons();
+
+  </script>
+  </body>
+</html>
