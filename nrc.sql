@@ -465,7 +465,8 @@ INSERT INTO `nrcs` (`id`, `name_en`, `name_mm`, `nrc_code`, `created_at`, `updat
 (422, 'PaSaLa', '(ပစလ) ပြင်စလူ', 14, '2020-11-25 23:24:12', '2020-11-25 23:24:12'),
 (423, 'YaThaYa', '(ရသယ) ရွှေသောင်ယံ', 14, '2020-11-25 23:24:12', '2020-11-25 23:24:12'),
 (424, 'KhAaHsa', '(ခအဇ) ချမ်းအေးသာစံ', 9, '2020-12-21 16:09:30', '2020-12-21 16:09:30'),
-(426, 'TaTaHta', 'တတထ (တံတား)', 12, '2020-12-31 15:00:10', '2020-12-31 15:00:10');
+(426, 'TaTaHta', 'တတထ (တံတား)', 12, '2020-12-31 15:00:10', '2020-12-31 15:00:10'),
+(427, 'MaTaNa', '(မတန) မေတ္တာမြို့နယ်ခွဲ', 6, '2026-04-08 17:03:25', '2026-04-08 17:03:25');
 
 --
 -- Indexes for dumped tables
@@ -485,7 +486,7 @@ ALTER TABLE `nrcs`
 -- AUTO_INCREMENT for table `nrcs`
 --
 ALTER TABLE `nrcs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=427;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=428;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
